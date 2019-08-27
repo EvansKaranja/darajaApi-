@@ -1,30 +1,23 @@
-import requests
-from requests.auth import HTTPBasicAuth
-import keys
 import base64
 from datetime import datetime
+import requests
+from keys import get_access_token
+import keys
 
-unformated_time = datetime.now()
-formatted_time = unformated_time.strftime("%Y%m%d%H%M%S")
+
+def get_formatted_time():
+    unformated_time = datetime.now()
+    formatted_time = unformated_time.strftime("%Y%m%d%H%M%S")
+    return formatted_time
 
 
 def get_decoded_password(*args):
     data_to_encode = keys.business_shortCode + \
-        keys.lina_na_mpesa_passkey+formatted_time
+        keys.lina_na_mpesa_passkey+get_formatted_time()
     encoded_string = base64.b64encode(data_to_encode.encode())
     decoded_password = encoded_string.decode('utf-8')
     return decoded_password
 # print(decoded_password)
-
-
-def get_access_token():
-    consumer_key = keys.consumer_key
-    consumer_secret = keys.consumer_secret
-    api_url = "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials"
-    r = requests.get(api_url, auth=HTTPBasicAuth(
-        consumer_key, consumer_secret))
-    json_response = r.json()
-    return json_response['access_token']
 
 
 def lipa_na_mpesa(*args):
@@ -34,7 +27,7 @@ def lipa_na_mpesa(*args):
     request = {
         "BusinessShortCode": keys.business_shortCode,
         "Password": get_decoded_password(),
-        "Timestamp": formatted_time,
+        "Timestamp": get_formatted_time(),
         "TransactionType": "CustomerPayBillOnline",
         "Amount": "1",
         "PartyA": keys.phone_number,
@@ -49,4 +42,3 @@ def lipa_na_mpesa(*args):
 
 
 lipa_na_mpesa()
-print(keys.phone_number)
