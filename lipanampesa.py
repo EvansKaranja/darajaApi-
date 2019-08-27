@@ -41,7 +41,7 @@ def lipa_na_mpesa(*args):
         "PartyB": keys.business_shortCode,
         "PhoneNumber": keys.phone_number,
         "CallBackURL": "https://fullstackdjango.com/lipanampesa",
-        "AccountReference": "Babe i love you",
+        "AccountReference": "KAW 324Z",
         "TransactionDesc": "pay parking fee"
     }
     response = requests.post(api_url, json=request, headers=headers)
